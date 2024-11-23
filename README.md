@@ -1,6 +1,6 @@
 # Leetcode_SQL_50
 
-  31. Triangle Judgement
+  32. Triangle Judgement
       Table: Triangle
 ```
 +-------------+------+
@@ -27,7 +27,7 @@ FROM Triangle
 
 ```
 
-  32. Consecutive Numbers
+  33. Consecutive Numbers
       Table: Logs
 ```
 +-------------+---------+
@@ -52,7 +52,7 @@ WHERE l1.num = L2.num AND l2.num = l3.num
 
 ```
 
-  33. Product Price at a Given Date
+  34. Product Price at a Given Date
       Table: Products
 ```
 +---------------+---------+
@@ -84,7 +84,7 @@ FROM (SELECT DISTINCT product_id FROM Products) p1;
 
 ```
 
- 34. Last Person to fit in the Bus
+ 35. Last Person to fit in the Bus
       Table: Queue
 ```
 +-------------+---------+
@@ -119,7 +119,7 @@ ORDER BY SUM(t2.weight) DESC
 LIMIT 1
 
 ```
- 35. Last Person to fit in the Bus
+ 36. Last Person to fit in the Bus
       Table: Queue
 ```
 +-------------+---------+
@@ -172,7 +172,7 @@ LIMIT 1;
 
 ```
 
-36. Count Salary Categories
+37. Count Salary Categories
       Table: Accounts
 ```
 +-------------+------+
@@ -216,4 +216,177 @@ WHERE income > 50000 ;
 
 
 ```
+38. Employees Whose Manager Left the Company
+      Table: Employees
+```
++-------------+----------+
+| Column Name | Type     |
++-------------+----------+
+| employee_id | int      |
+| name        | varchar  |
+| manager_id  | int      |
+| salary      | int      |
++-------------+----------+
+In SQL, employee_id is the primary key for this table.
+This table contains information about the employees, their salary, and the ID of their manager. Some employees do not have a manager (manager_id is null). 
+```
+Find the IDs of the employees whose salary is strictly 
+less than $30000 and whose manager left the company.
+When a manager leaves the company, their
+information is deleted from the Employees table, 
+but the reports still have their manager_id set to the manager that left.
+Return the result table ordered by employee_id.
 
+```SQL
+-- Join
+
+SELECT e.employee_id
+FROM employees e
+LEFT JOIN employees m 
+ON e.manager_id IS NOT NULL 
+AND e.manager_id = m.employee_id
+WHERE e.salary < 30000
+  AND e.manager_id IS NOT NULL
+  AND m.employee_id IS NULL
+ORDER BY e.employee_id;
+
+```
+or 
+
+```SQL
+-- Subquery
+
+SELECT employee_id
+FROM employees
+WHERE salary < 30000
+    AND manager_id NOT IN (
+        SELECT employee_id
+        FROM employees
+    )
+ORDER BY employee_id;
+
+
+```
+39. Exchange Seats
+      Table: Seat
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| student     | varchar |
++-------------+---------+
+id is the primary key (unique value) column for this table.
+Each row of this table indicates the name and the ID of a student.
+The ID sequence always starts from 1 and increments continuously.
+
+```
+Write a solution to swap the seat id of every two consecutive students. 
+If the number of students is odd, the id of the last student is not swapped.
+Return the result table ordered by id in ascending order.
+
+```SQL
+SELECT 
+    CASE 
+        WHEN MOD(id, 2) = 1 AND id + 1 <= (SELECT MAX(id) FROM Seat) THEN id + 1
+        WHEN MOD(id, 2) = 0 THEN id - 1
+        ELSE id
+    END AS id, student
+FROM Seat
+ORDER BY id;
+
+```
+40. Movie Rating
+      Table: Movies
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| movie_id      | int     |
+| title         | varchar |
++---------------+---------+
+movie_id is the primary key (column with unique values) for this table.
+title is the name of the movie.
+
+```
+
+ Table: Users
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| name          | varchar |
++---------------+---------+
+user_id is the primary key (column with unique values) for this table.
+The column 'name' has unique values.
+
+```
+
+Table: MovieRating
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| movie_id      | int     |
+| user_id       | int     |
+| rating        | int     |
+| created_at    | date    |
++---------------+---------+
+(movie_id, user_id) is the primary key (column with unique values) for this table.
+This table contains the rating of a movie by a user in their review.
+created_at is the user's review date. 
+
+```
+
+Write a solution to:
+
+Find the name of the user who has rated the greatest number of movies. 
+In case of a tie, return the lexicographically smaller user name.
+Find the movie name with the highest average rating in February 2020. 
+In case of a tie, return the lexicographically smaller movie name.
+
+```SQL
+(SELECT name AS results
+FROM Users JOIN MovieRating USING(user_id)
+GROUP BY name
+ORDER BY COUNT(*) DESC, name
+LIMIT 1)
+
+UNION ALL
+
+(SELECT title AS results
+FROM Movies JOIN MovieRating USING(movie_id)
+WHERE created_at BETWEEN '2020-02-01' AND '2020-02-29'
+GROUP BY title
+ORDER BY AVG(rating) DESC, title
+LIMIT 1);
+
+```
+41. Restaurant Growth
+      Table: Customer
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| customer_id   | int     |
+| name          | varchar |
+| visited_on    | date    |
+| amount        | int     |
++---------------+---------+
+In SQL,(customer_id, visited_on) is the primary key for this table.
+This table contains data about customer transactions in a restaurant.
+visited_on is the date on which the customer with ID (customer_id) has visited the restaurant.
+amount is the total paid by a customer.
+
+```
+You are the restaurant owner and you want to analyze a possible expansion 
+(there will be at least one customer every day).
+Compute the moving average of how much the customer paid in a seven days window
+(i.e., current day + 6 days before). average_amount should be rounded to two decimal places.
+Return the result table ordered by visited_on in ascending order.
+
+```SQL
+
+
+```
