@@ -1,6 +1,6 @@
 # Leetcode_SQL_50
 
-  32. Triangle Judgement
+  30. Triangle Judgement
       Table: Triangle
 ```
 +-------------+------+
@@ -27,7 +27,7 @@ FROM Triangle
 
 ```
 
-  33. Consecutive Numbers
+  31. Consecutive Numbers
       Table: Logs
 ```
 +-------------+---------+
@@ -52,7 +52,7 @@ WHERE l1.num = L2.num AND l2.num = l3.num
 
 ```
 
-  34. Product Price at a Given Date
+  32. Product Price at a Given Date
       Table: Products
 ```
 +---------------+---------+
@@ -84,7 +84,7 @@ FROM (SELECT DISTINCT product_id FROM Products) p1;
 
 ```
 
- 35. Last Person to fit in the Bus
+ 33. Last Person to fit in the Bus
       Table: Queue
 ```
 +-------------+---------+
@@ -119,7 +119,7 @@ ORDER BY SUM(t2.weight) DESC
 LIMIT 1
 
 ```
- 36. Last Person to fit in the Bus
+ 34. Last Person to fit in the Bus
       Table: Queue
 ```
 +-------------+---------+
@@ -172,7 +172,7 @@ LIMIT 1;
 
 ```
 
-37. Count Salary Categories
+35. Count Salary Categories
       Table: Accounts
 ```
 +-------------+------+
@@ -216,7 +216,7 @@ WHERE income > 50000 ;
 
 
 ```
-38. Employees Whose Manager Left the Company
+36. Employees Whose Manager Left the Company
       Table: Employees
 ```
 +-------------+----------+
@@ -267,7 +267,7 @@ ORDER BY employee_id;
 
 
 ```
-39. Exchange Seats
+37. Exchange Seats
       Table: Seat
 ```
 +-------------+---------+
@@ -296,7 +296,7 @@ FROM Seat
 ORDER BY id;
 
 ```
-40. Movie Rating
+38. Movie Rating
       Table: Movies
 ```
 +---------------+---------+
@@ -363,7 +363,7 @@ ORDER BY AVG(rating) DESC, title
 LIMIT 1);
 
 ```
-41. Restaurant Growth
+39. Restaurant Growth
       Table: Customer
 ```
 +---------------+---------+
@@ -387,6 +387,155 @@ Compute the moving average of how much the customer paid in a seven days window
 Return the result table ordered by visited_on in ascending order.
 
 ```SQL
+SELECT visited_on, 
+    (
+        SELECT SUM(amount)
+        FROM customer
+        WHERE visited_on BETWEEN DATE_SUB(c.visited_on, INTERVAL 6 DAY) AND c.visited_on
+    ) AS amount, 
+    ROUND(
+        (
+            SELECT SUM(amount) / 7
+            FROM customer
+            WHERE visited_on BETWEEN DATE_SUB(c.visited_on, INTERVAL 6 DAY) AND c.visited_on
+        ), 2
+    ) AS average_amount
+FROM customer c
+WHERE visited_on >= (
+    SELECT DATE_ADD(MIN(visited_on), INTERVAL 6 DAY)
+    FROM customer
+)
+GROUP BY visited_on
 
 
 ```
+40. Friend Requests II: Who Has the Most Friends
+     Table: RequestAccepted
+```
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| requester_id   | int     |
+| accepter_id    | int     |
+| accept_date    | date    |
++----------------+---------+
+(requester_id, accepter_id) is the primary key (combination of columns with unique values) for this table.
+This table contains the ID of the user who sent the request, the ID of the user who received the request, and the date when the request was accepted.
+
+```
+
+Write a solution to find the people who have the most friends and the most friends number.
+The test cases are generated so that only one person has the most friends.
+
+```SQL
+
+WITH base AS (
+    SELECT requester_id AS id
+    FROM RequestAccepted
+    UNION ALL
+    SELECT accepter_id 
+    FROM RequestAccepted
+    )
+SELECT id,
+    COUNT(*) num 
+FROM base
+GROUP BY id
+ORDER BY COUNT(*) DESC
+LIMIT 1
+
+```
+
+41. Investments in 2016
+     Table: Insurance
+```
++-------------+-------+
+| Column Name | Type  |
++-------------+-------+
+| pid         | int   |
+| tiv_2015    | float |
+| tiv_2016    | float |
+| lat         | float |
+| lon         | float |
++-------------+-------+
+pid is the primary key (column with unique values) for this table.
+Each row of this table contains information about one policy where:
+pid is the policyholder's policy ID.
+tiv_2015 is the total investment value in 2015 and tiv_2016 is the total investment value in 2016.
+lat is the latitude of the policy holder's city. It's guaranteed that lat is not NULL.
+lon is the longitude of the policy holder's city. It's guaranteed that lon is not NULL.
+
+```
+Write a solution to report the sum of all total investment 
+values in 2016 tiv_2016, for all policyholders who:
+have the same tiv_2015 value as one or more other policyholders, and
+are not located in the same city as any other policyholder 
+(i.e., the (lat, lon) attribute pairs must be unique).
+Round tiv_2016 to two decimal places.
+
+```SQL
+
+SELECT 
+    ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM Insurance
+WHERE tiv_2015 IN (
+    SELECT tiv_2015
+    FROM Insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(*) > 1
+) AND (lat, lon) IN (
+    SELECT lat, 
+           lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(*) = 1
+)
+
+```
+42. Investments in 2016
+     Table: Employee
+```
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| id           | int     |
+| name         | varchar |
+| salary       | int     |
+| departmentId | int     |
++--------------+---------+
+id is the primary key (column with unique values) for this table.
+departmentId is a foreign key (reference column) of the ID from the Department table.
+Each row of this table indicates the ID, name, and salary of an employee. It also contains the ID of their department.
+```
+ Table: Department
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table indicates the ID of a department and its name.
+
+```
+A company's executives are interested in seeing who earns the most money in each of the company's departments.
+A high earner in a department is an employee who has a salary in the top three unique salaries for that department.
+Write a solution to find the employees who are high earners in each of the departments.
+Return the result table in any order.
+
+```SQL
+-- O(n^2) poor perfomance
+SELECT 
+    d.name AS Department,
+    e.name AS Employee,
+    e.salary AS Salary
+FROM Employee AS e
+JOIN Department AS d ON e.departmentId = d.id
+WHERE 3 > (
+    SELECT COUNT(DISTINCT salary)
+    FROM Employee e2
+    WHERE e2.salary > e.salary AND e.departmentId = e2.departmentId
+);
+```
+
+
