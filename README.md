@@ -695,15 +695,31 @@ WHERE o.order_date BETWEEN '2020-02-01' AND '2020-02-29'
 GROUP BY p.product_id, p.product_name
 HAVING SUM(o.unit) >= 100;
 ```
-49.  (Easy) .
+49. Find Users With Valid E-Mails (Easy) 1517.
 
-Table 
+Table Users
 ```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| name          | varchar |
+| mail          | varchar |
++---------------+---------+
+user_id is the primary key (column with unique values) for this table.
+This table contains information of the users signed up in a website. Some e-mails are invalid.
 
 ```
-
+Write a solution to find the users who have valid emails.
+A valid e-mail has a prefix name and a domain where:
+The prefix name is a string that may contain letters (upper or lower case),
+digits, underscore '_', period '.', and/or dash '-'. The prefix name must start with a letter.
+The domain is '@leetcode.com'.
+Return the result table in any order.
 ```SQL
-
+SELECT user_id, name, mail
+FROM Users
+WHERE mail REGEXP '^[a-zA-Z][a-zA-Z0-9._-]*@leetcode\\.com$';
 ```
 50.  (Easy) .
 
