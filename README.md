@@ -586,35 +586,77 @@ FROM Patients
 WHERE conditions LIKE 'DIAB1%' or conditions LIKE '% DIAB1%'
 ```
 
-45.  (Easy) .
+45. Delete Duplicate Emails (Easy) 196.
 
-Table 
+Table Person
 ```
-
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains an email. The emails will not contain uppercase letters.
 ```
+Write a solution to delete all duplicate emails, keeping only one unique email with the smallest id.
+For SQL users, please note that you are supposed to write a DELETE statement and not a SELECT one.
+For Pandas users, please note that you are supposed to modify Person in place.
+After running your script, the answer shown is the Person table. The driver will first 
+compile and run your piece of code and then show the Person table. 
+The final order of the Person table does not matter.
 
 ```SQL
-
+DELETE p1 
+FROM person p1, person p2
+WHERE p1.email = p2.email AND p1.id > p2.id;
 ```
-46.  (Easy) .
+46. Second Highest Salary (Medium) 176.
 
-Table 
+Table Employee
 ```
-
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| salary      | int  |
++-------------+------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains information about the salary of an employee.
 ```
+Write a solution to find the second highest distinct salary from the Employee table. 
+If there is no second highest salary, return null (return None in Pandas).
 
 ```SQL
-
+SELECT MAX(salary) AS SecondHighestSalary
+FROM Employee
+WHERE salary < (SELECT MAX(salary) FROM Employee);
 ```
-47.  (Easy) .
+47. Group Sold Products By the Date (Easy) 1484.
 
-Table 
+Table Activities
 ```
-
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| sell_date   | date    |
+| product     | varchar |
++-------------+---------+
+There is no primary key (column with unique values) for this table. It may contain duplicates.
+Each row of this table contains the product name and the date it was sold in a market.
 ```
-
+Write a solution to find for each date the number of different products sold and their names.
+The sold products names for each date should be sorted lexicographically.
+Return the result table ordered by sell_date.
+The result format is in the following example.
 ```SQL
-
+SELECT 
+    sell_date, 
+    COUNT(DISTINCT product) AS num_sold,
+    GROUP_CONCAT(DISTINCT product ORDER BY product) AS products
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date;
 ```
 48.  (Easy) .
 
