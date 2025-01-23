@@ -1,6 +1,197 @@
 # Leetcode_SQL_50
+### 1. Recyclable and Low Fat Products (Easy) 1757.
 
-  30. Triangle Judgement
+Table: Products
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| product_id  | int     |
+| low_fats    | enum    |
+| recyclable  | enum    |
++-------------+---------+
+product_id is the primary key (column with unique values) for this table.
+low_fats is an ENUM (category) of type ('Y', 'N') where 'Y' means this product is low fat and 'N' means it is not.
+recyclable is an ENUM (category) of types ('Y', 'N') where 'Y' means this product is recyclable and 'N' means it is not.
+```
+Write a solution to find the ids of products that are both low fat and recyclable.
+Return the result table in any order.
+
+```SQL
+SELECT product_id
+FROM Products
+WHERE low_fats = 'Y' and recyclable = 'Y';
+```
+### 2. 
+
+Table: Customer
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| referee_id  | int     |
++-------------+---------+
+In SQL, id is the primary key column for this table.
+Each row of this table indicates the id of a customer, their name, and the id of the customer who referred them.
+```
+Find the names of the customer that are not referred by the customer with id = 2.
+Return the result table in any order.
+The result format is in the following example.
+
+```SQL
+SELECT name
+FROM Customer
+WHERE referee_id is null or referee_id !=2;
+```
+### 3. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 4. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 5. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 6. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 7. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 8. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 9. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 10. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 11. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 12. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 13. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 14. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+### 15. 
+
+Table: Triangle
+```
+
+```
+
+
+```SQL
+
+```
+
+
+
+30. Triangle Judgement
       Table: Triangle
 ```
 +-------------+------+
