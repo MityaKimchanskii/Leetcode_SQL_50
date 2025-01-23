@@ -96,27 +96,61 @@ FROM Views
 WHERE author_id = viewer_id
 ORDER BY author_id;
 ```
-### 5. 
+### 5. Invalid Tweets (easy) 1663. 
 
-Table: Triangle
+Table: Tweets
 ```
-
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| tweet_id       | int     |
+| content        | varchar |
++----------------+---------+
+tweet_id is the primary key (column with unique values) for this table.
+content consists of characters on an American Keyboard, and no other special characters.
+This table contains all the tweets in a social media app.
 ```
-
+Write a solution to find the IDs of the invalid tweets. The tweet is invalid if the number 
+of characters used in the content of the tweet is strictly greater than 15.
+Return the result table in any order.
 
 ```SQL
-
+SELECT tweet_id
+FROM Tweets
+WHERE LENGTH(content) > 15;
 ```
-### 6. 
+### 6. Replace Employee ID With the Unique Identifier (Easy) 1378.
 
-Table: Triangle
+Table: Employees and 
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| name          | varchar |
++---------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains the id and the name of an employee in a company.
+ 
+
+Table: EmployeeUNI
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| unique_id     | int     |
++---------------+---------+
+(id, unique_id) is the primary key (combination of columns with unique values) for this table.
+Each row of this table contains the id and the corresponding unique id of an employee in the company.
 ```
-
-```
-
+Write a solution to show the unique ID of each user, If a user does not have a unique ID replace just show null.
+Return the result table in any order.
 
 ```SQL
-
+SELECT p.unique_id, c.name
+FROM Employees c
+LEFT JOIN EmployeeUNI AS p ON c.id = p.id;
 ```
 ### 7. 
 
