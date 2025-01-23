@@ -283,17 +283,52 @@ ON a.machine_id = b.machine_id
 AND a.activity_type != b.activity_type
 WHERE a.activity_type = 'start'
 GROUP BY a.machine_id;
+-----------------------------------------------------------------
+SELECT
+    a.machine_id,
+    ROUND(AVG(b.timestamp - a.timestamp), 3) AS processing_time
+FROM Activity a
+JOIN Activity b
+ON a.machine_id = b.machine_id
+    AND a.activity_type = 'start'
+    AND b.activity_type = 'end'
+GROUP BY a.machine_id;
 ```
-### 11. 
+### 11. Employees Bonus (easy) 577.
 
-Table: Triangle
+Table: Employee
 ```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| empId       | int     |
+| name        | varchar |
+| supervisor  | int     |
+| salary      | int     |
++-------------+---------+
+empId is the column with unique values for this table.
+Each row of this table indicates the name and the ID of an employee in addition to their salary and the id of their manager.
 
+Table: Bonus
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| empId       | int  |
+| bonus       | int  |
++-------------+------+
+empId is the column of unique values for this table.
+empId is a foreign key (reference column) to empId from the Employee table.
+Each row of this table contains the id of an employee and their respective bonus.
 ```
-
+Write a solution to report the name and bonus amount of each employee with a bonus less than 1000.
+Return the result table in any order.
 
 ```SQL
-
+SELECT e.name, b.bonus
+FROM Employee AS e
+LEFT JOIN Bonus AS b 
+ON e.empId = b.empId
+WHERE b.bonus < 1000 OR b.bonus IS NULL
 ```
 ### 12. 
 
