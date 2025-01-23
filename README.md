@@ -441,6 +441,14 @@ Return the result table in any order.
 ```SQL
 SELECT 
     s.user_id,
+    ROUND(AVG(IF(action = 'confirmed', 1, 0)), 2) AS confirmation_rate
+FROM Signups AS s
+LEFT JOIN Confirmations AS c
+ON s.user_id = c.user_id
+GROUP BY s.user_id
+---------------------------------------------------------------------
+SELECT 
+    s.user_id,
     ROUND(
         CASE 
             WHEN c.user_id IS NULL THEN 0
@@ -452,16 +460,30 @@ LEFT JOIN Confirmations c
 ON s.user_id = c.user_id
 GROUP BY user_id
 ```
-### 15. 
+### 15. Not Boring Movies (Easy) 620.
 
-Table: Triangle
+Table: Cinema
 ```
-
++----------------+----------+
+| Column Name    | Type     |
++----------------+----------+
+| id             | int      |
+| movie          | varchar  |
+| description    | varchar  |
+| rating         | float    |
++----------------+----------+
+id is the primary key (column with unique values) for this table.
+Each row contains information about the name of a movie, its genre, and its rating.
+rating is a 2 decimal places float in the range [0, 10]
 ```
-
-
+Write a solution to report the movies with an odd-numbered ID and a description that is not "boring".
+Return the result table ordered by rating in descending order.
 ```SQL
-
+SELECT id, movie, description, rating
+FROM Cinema
+WHERE id % 2 != 0 
+AND description NOT LIKE '%boring%' 
+ORDER BY rating DESC
 ```
 
 
