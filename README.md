@@ -485,9 +485,190 @@ WHERE id % 2 != 0
 AND description NOT LIKE '%boring%' 
 ORDER BY rating DESC
 ```
+### 16. Average Selling Price (Easy) 1251.
 
+Table: Prices
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| start_date    | date    |
+| end_date      | date    |
+| price         | int     |
++---------------+---------+
+(product_id, start_date, end_date) is the primary key (combination of columns with unique values) for this table.
+Each row of this table indicates the price of the product_id in the period from start_date to end_date.
+For each product_id there will be no two overlapping periods. That means there will be no two intersecting periods for the same product_id.
+ 
+Table: UnitsSold
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| product_id    | int     |
+| purchase_date | date    |
+| units         | int     |
++---------------+---------+
+This table may contain duplicate rows.
+Each row of this table indicates the date, units, and product_id of each product sold.
+```
+Write a solution to find the average selling price for each product. average_price 
+should be rounded to 2 decimal places. If a product does not have any sold units, 
+its average selling price is assumed to be 0.
+Return the result table in any order.
+```SQL
+SELECT p.product_id,
+    ROUND(
+        CASE 
+            WHEN u.units IS NULL THEN 0
+            ELSE SUM(p.price * u.units) / SUM(u.units) 
+        END, 
+    2) AS average_price
+FROM Prices AS p
+LEFT JOIN UnitsSold AS u
+ON p.product_id = u.product_id
+WHERE u.purchase_date >= p.start_date AND u.purchase_date <= p.end_date OR u.purchase_date IS NULL
+GROUP BY p.product_id
+-------------------------------------------------------------------------------------------------
+SELECT 
+    p.product_id, 
+    COALESCE(ROUND(SUM(p.price * u.units) * 1.0 / SUM(u.units), 2), 0) AS average_price
+FROM Prices AS p
+LEFT JOIN UnitsSold u
+ON p.product_id = u.product_id
+AND u.purchase_date BETWEEN p.start_date and p.end_date
+GROUP BY p.product_id 
+```
+### 17.  (Easy) .
 
+Table: 
+```
 
+```
+
+```SQL
+
+```
+### 18.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 19.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 20.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 21.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 22.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 23.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 24.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 25.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 26.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 27.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 28.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
+### 29.  (Easy) .
+
+Table: 
+```
+
+```
+
+```SQL
+
+```
 30. Triangle Judgement
       Table: Triangle
 ```
