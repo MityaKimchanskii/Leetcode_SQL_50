@@ -574,15 +574,40 @@ LEFT JOIN Employee AS e
 ON p.employee_id = e.employee_id
 GROUP BY project_id
 ```
-### 18.  (Easy) .
+### 18. Percentage of Users Attended a Contest (Easy) 1633.
 
-Table: 
+Table: Users
 ```
-
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| user_id     | int     |
+| user_name   | varchar |
++-------------+---------+
+user_id is the primary key (column with unique values) for this table.
+Each row of this table contains the name and the id of a user.
+ 
+Table: Register
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| contest_id  | int     |
+| user_id     | int     |
++-------------+---------+
+(contest_id, user_id) is the primary key (combination of columns with unique values) for this table.
+Each row of this table contains the id of a user and the contest they registered into.
 ```
-
+Write a solution to find the percentage of the users registered in each contest rounded to two decimals.
+Return the result table ordered by percentage in descending order. 
+In case of a tie, order it by contest_id in ascending order.
 ```SQL
-
+SELECT r.contest_id, 
+    ROUND(COUNT(r.user_id) * 100/(SELECT COUNT(DISTINCT u.user_id) FROM Users u), 2) AS percentage
+FROM Register AS r
+JOIN Users AS u 
+ON u.user_id = r.user_id
+GROUP BY r.contest_id
+ORDER BY percentage DESC, contest_id
 ```
 ### 19.  (Easy) .
 
